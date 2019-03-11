@@ -861,7 +861,7 @@ class DomainClient(base.BaseDomainClient):
         :param searchType: 
             Type of search. Can be residential, commercial or business
         "param data
-            Data for the search (as a string). See data model on the API documentation. 
+            Data for the search (as a string or as a json). See data model on the API documentation. 
             Example for data (from the domain website):
                 {
                     "listingType":"Sale",
@@ -887,4 +887,6 @@ class DomainClient(base.BaseDomainClient):
         """
         searchType = validate.searchTypes(searchType)
         
-        return self._api_request(f"listings/{searchType}/_search", http_method='POST', **kwargs)
+        
+        
+        return self._api_request(f"listings/{searchType}/_search", http_method='POST', **dict(kwargs, data=data))
