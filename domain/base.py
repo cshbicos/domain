@@ -48,7 +48,7 @@ class BaseDomainClient(object):
         return uri(end_point, **kwds)
 
 
-    def _api_request(self, end_point, token, **kwargs):
+    def _api_request(self, end_point, token, http_method, **kwargs):
         r"""
         Execute an API request to the Domain API.
 
@@ -58,8 +58,12 @@ class BaseDomainClient(object):
 
         session = requests.session()
         session.headers.update(token.headers)
-
-        r = session.get(self._api_url(end_point), **kwargs)
+        
+        if http_method == 'POST':
+            r = session.post(self._api_url(end_point), **kwargs)
+        else:
+            r = session.get(self._api_url(end_point), **kwargs)
+            
         if not r.ok:
             r.raise_for_status()
         return r.json()

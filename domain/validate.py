@@ -18,6 +18,23 @@ def case_insensitive_string(string, available, default=None):
         return available[index]
 
 
+def searchTypes(searchType):
+    available_search_types = ["residential", "commercial", "business"]
+    
+    if searchType is None:
+        raise ValueError("You must provide one of the following types for your search: {}".format(
+            ", ".join(available_search_types)))
+
+    try:
+        index = available_search_types.index(str(searchType).lower())
+
+    except ValueError:
+        raise ValueError("You must provide one of the following types for your search: {}".format(
+            ", ".join(available_search_types)))
+
+    else:
+        return available_search_types[index]
+
 
 def listing_type(entry):
     if entry is None:

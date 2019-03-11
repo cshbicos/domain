@@ -853,3 +853,38 @@ class DomainClient(base.BaseDomainClient):
         data = dict(page_number=page_number, page_size=page_size)
         return self._api_request(f"webhooks/{id}/subscriptions", params=data, **kwargs)
     
+    
+    @authorisation.requires_scope("api_listings_read", "api_listings_write")
+    def search(self, searchType, data, **kwargs):
+        r"""
+        Searches listings
+        :param searchType: 
+            Type of search. Can be residential, commercial or business
+        "param data
+            Data for the search (as a string). See data model on the API documentation. 
+            Example for data (from the domain website):
+                {
+                    "listingType":"Sale",
+                    "propertyTypes":[
+                        "House",
+                        "NewApartments"
+                    ],
+                    "minBedrooms":3,
+                    "minBathrooms":2,
+                    "minCarspaces":1,
+                    "locations":[
+                        {
+                        "state":"NSW",
+                        "region":"",
+                        "area":"",
+                        "suburb":"Newtown",
+                        "postCode":"",
+                        "includeSurroundingSuburbs":false
+                        }
+                    ]
+                }
+            
+        """
+        searchType = validate.searchTypes(searchType)
+        
+        return self._api_request(f"listings/{searchType}/_search", http_method='POST', **kwargs)
